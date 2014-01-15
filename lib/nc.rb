@@ -4,10 +4,12 @@ require 'terminal-notifier'
 class Nc < RSpec::Core::Formatters::BaseTextFormatter
   def dump_summary(duration, example_count, failure_count, pending_count)
     body = []
-    body << "Finished in #{format_duration duration}"
+    #body << "Finished in #{format_duration duration}"
     body << summary_line(example_count, failure_count, pending_count)
 
     name = File.basename(File.expand_path '.')
+
+    body <<  "Test Coverage: #{JSON.parse(File.open(Dir.pwd+"/coverage/.last_run.json").read)["result"]["covered_percent"].to_s}%"
 
     title = if failure_count > 0
       "\u26D4 #{name}: #{failure_count} failed example#{failure_count == 1 ? nil : 's'}"
