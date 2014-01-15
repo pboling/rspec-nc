@@ -9,9 +9,9 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
     name = File.basename(File.expand_path '.')
 
     if Object.const_defined?('SimpleCov')
-      body <<  "Test Coverage: #{JSON.parse(File.open(Dir.pwd+"/coverage/coverage.json").read)["metrics"]["covered_percent"].round(2).to_s}%"
+      sub=  "Test Coverage: #{JSON.parse(File.open(Dir.pwd+"/coverage/coverage.json").read)["metrics"]["covered_percent"].round(2).to_s}% \u{1F63C}"
     else
-      body << "Finished in #{format_duration duration}"
+      sub= "Finished in #{format_duration duration}"
     end
 
     title = if failure_count > 0
@@ -20,7 +20,7 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
       "\u2705 #{name}: Success"
     end
 
-    say title, body.join("\n")
+    say title, body.join("\n"), sub
   end
 
   def dump_pending; end
@@ -29,7 +29,7 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
 
   private
 
-  def say(title, body)
-    TerminalNotifier.notify body, :title => title
+  def say(title, body, sub)
+    TerminalNotifier.notify body, :title => title, :subtitle => sub
   end
 end
