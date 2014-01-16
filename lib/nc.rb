@@ -9,7 +9,8 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
     name = File.basename(File.expand_path '.')
 
     if Object.const_defined?('SimpleCov')
-      sub=  "Test Coverage: #{JSON.parse(File.open(Dir.pwd+"/coverage/coverage.json").read)["metrics"]["covered_percent"].round(2).to_s}% \u{1F63C}"
+      json = JSON.parse(File.open(Dir.pwd+"/coverage/coverage.json").read
+      sub=  "Test Coverage: #{json["metrics"]["covered_percent"].round(2).to_s}% Strength: #{json["metrics"]["covered_strength"].round(1).to_s} \u{1F63C}"
     else
       sub= "Finished in #{format_duration duration}"
     end
