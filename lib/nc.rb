@@ -4,7 +4,12 @@ require 'terminal-notifier'
 class Nc < RSpec::Core::Formatters::BaseTextFormatter
   def dump_summary(duration, example_count, failure_count, pending_count)
     body = []
-    body << "Finished in #{format_duration duration}"
+    if Object.const_defined?('SimpleCov')
+      json = JSON.parse(File.open(Dir.pwd+"/coverage/coverage.json").read)
+      sub=  "Test Coverage: #{json["metrics"]["covered_percent"].round(2).to_s}% Strength: #{json["metrics"]["covered_strength"].round(1).to_s} \u{1F63C}"
+    else
+      sub= "Finished in #{format_duration duration}"
+    end
     body << summary_line(example_count, failure_count, pending_count)
 
     name = File.basename(File.expand_path '.')
@@ -15,7 +20,7 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
       "\u2705 #{name}: Success"
     end
 
-    say title, body.join("\n")
+    say title, body.join("\n"), sub
   end
 
   def dump_pending; end
@@ -25,6 +30,6 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
   private
 
   def say(title, body)
-    TerminalNotifier.notify body, :title => title if TerminalNotifier.available?
+    TerminalNotifier.notify body, :title => title, :subtitle => sub if TerminalNotifier.available?
   end
 end
