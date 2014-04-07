@@ -28,6 +28,11 @@ in your .rspec file:
 --format Nc
 ```
 
+Installation
+------------
+
+This gem currently supports rspec ~> 2.9 (meaning 2.9 - 2.14, not 2.99 or 3.0).
+
 Contributing
 ------------
 
