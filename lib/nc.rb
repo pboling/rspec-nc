@@ -29,7 +29,11 @@ class Nc < RSpec::Core::Formatters::BaseTextFormatter
 
   private
 
-  def say(title, body)
-    TerminalNotifier.notify body, :title => title, :subtitle => sub if TerminalNotifier.available?
+  def say(title, body, sub = nil)
+    if TerminalNotifier.available?
+      options = {:title => title}
+      options.merge!(:subtitle => sub) if !sub.nil?
+      TerminalNotifier.notify body, options
+    end
   end
 end
