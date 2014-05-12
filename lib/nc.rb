@@ -4,7 +4,7 @@ require 'terminal-notifier'
 class Nc < RSpec::Core::Formatters::BaseTextFormatter
   def dump_summary(duration, example_count, failure_count, pending_count)
     body = []
-    if Object.const_defined?('SimpleCov')
+    if Object.const_defined?('SimpleCov') && File.exists?(Dir.pwd+"/coverage/coverage.json")
       json = JSON.parse(File.open(Dir.pwd+"/coverage/coverage.json").read)
       sub=  "Test Coverage: #{json["metrics"]["covered_percent"].round(2).to_s}% Strength: #{json["metrics"]["covered_strength"].round(1).to_s} \u{1F63C}"
     else
